@@ -1,6 +1,5 @@
 <?php
 include_once __DIR__ . '/config.php';
-
 $stmt = $pdo->query("SELECT id, titulo, criado_em FROM formularios ORDER BY criado_em DESC");
 $formularios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -56,9 +55,74 @@ $formularios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             z-index: 9999;
         }
+
+                .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #a0c1e8;
+            position: fixed;
+            padding: 20px 10px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar img {
+            width: 130px;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        body {
+  margin: 0;
+  padding-left: 220px;
+}
+
+/* sidebar fixa, ancorada e acima de tudo */
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background-color: #a0c1e8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 10px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
     </style>
 </head>
 <body>
+
+
+    <div class="sidebar">
+        <img src="../assets/nw.png" alt="Logo Avalia+">
+        <ul>
+            <li><a href="painelusuarios.php">Inicio</a></li>
+            <?php
+              if (session_status() === PHP_SESSION_NONE) { session_start(); }
+              $cargo = strtolower($_SESSION['cargo'] ?? '');
+              if (in_array($cargo, ['coordenador','admin'], true)):
+            ?>
+              <li><a href="cadastrar.php">Cadastrar</a></li>
+            <?php endif; ?>
+            <li><a href="formularios.php">Criar Provas</a></li>
+            <li><a href="calendario.php">Calendário</a></li>
+            <li><a href="comousar.php">Como usar</a></li>
+        </ul>
+        <a class="logout" href="logout.php" style="color: white; margin-top: 30px; display: inline-block;">
+            <img src="../assets/logout.png" alt="Logout" style="width: 20px; vertical-align: middle; margin-right: 5px;">
+            Logout
+        </a>
+    </div>
 
     <h1 style="margin: 20px;">Formulários</h1>
 
@@ -84,8 +148,10 @@ $formularios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
     <?php endif; ?>
 
+    
 </body>
 </html>
+
 
 
 <?php if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1): ?>

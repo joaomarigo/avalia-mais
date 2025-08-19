@@ -54,22 +54,6 @@ footer {
   text-align: center;
 }
 
-#materias {
-  display: block;
-  width: 420px;
-  margin: 1rem 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-
-  box-sizing: border-box;
-  height: auto;
-}
-
-#materias option {
-  padding: 10px;
-}
-
 .botao-foto {
   display: block;
   width: 410px;

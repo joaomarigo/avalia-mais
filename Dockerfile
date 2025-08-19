@@ -1,46 +1,27 @@
-# Dockerfile — mantém sua estrutura como está e serve tudo
-FROM php:8.2-apache
+    # Dockerfile for PHP 8.2 + Apache on Render
+    FROM php:8.2-apache
 
-# Dependências e extensões PHP
-RUN apt-get update && apt-get install -y \
-    unzip git libzip-dev \
-  && docker-php-ext-install zip mysqli pdo pdo_mysql \
-  && rm -rf /var/lib/apt/lists/*
+    # Install PHP extensions needed by the project
+    RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Habilita mod_rewrite (URLs amigáveis / .htaccess)
-RUN a2enmod rewrite
+    # Enable Apache modules
+    RUN a2enmod rewrite
 
-# Copia o projeto inteiro (sem mover nada)
-COPY . /var/www/html/
+    # Set DocumentRoot to /var/www/html/php because your index.php está em /php
+    ENV APACHE_DOCUMENT_ROOT=/var/www/html/php
+    RUN sed -ri -e 's!DocumentRoot /var/www/html!DocumentRoot ${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf &&         sed -ri -e 's!</VirtualHost>!
+    <Directory ${APACHE_DOCUMENT_ROOT}>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>!g' /etc/apache2/sites-available/000-default.conf &&         sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
-# Permissões básicas
-RUN chown -R www-data:www-data /var/www/html
+    # Copy app
+    COPY . /var/www/html
 
-# Apache:
-# - mantém DocumentRoot padrão (/var/www/html)
-# - libera .htaccess e acesso às pastas
-# - aceita fallback para php/index.php se a raiz não tiver index
-RUN printf '%s\n' \
-  'DirectoryIndex index.php index.html php/index.php proj_avalia/index.php proj_avalia/php/index.php' \
-  '<Directory /var/www/html>' \
-  '  Options Indexes FollowSymLinks' \
-  '  AllowOverride All' \
-  '  Require all granted' \
-  '</Directory>' \
-  '<Directory /var/www/html/php>' \
-  '  Options Indexes FollowSymLinks' \
-  '  AllowOverride All' \
-  '  Require all granted' \
-  '</Directory>' \
-  '<Directory /var/www/html/proj_avalia>' \
-  '  Options Indexes FollowSymLinks' \
-  '  AllowOverride All' \
-  '  Require all granted' \
-  '</Directory>' \
-  '<Directory /var/www/html/proj_avalia/php>' \
-  '  Options Indexes FollowSymLinks' \
-  '  AllowOverride All' \
-  '  Require all granted' \
-  '</Directory>' \
-  > /etc/apache2/conf-available/project.conf \
-  && a2enconf project
+    # Adjust Apache to listen on Render's $PORT (falls back to 8080 locally)
+    COPY docker/start.sh /usr/local/bin/start.sh
+    RUN chmod +x /usr/local/bin/start.sh
+
+    EXPOSE 8080
+    CMD ["/usr/local/bin/start.sh"]

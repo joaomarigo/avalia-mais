@@ -41,7 +41,7 @@
         justify-content: center;
         align-items: center;
         padding: 40px;
-        background-color: #f7f7f7;
+        background-color: #f2f2f2;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
     }
 
@@ -85,7 +85,7 @@
       width:55%;
       padding: 7px;
       font-size: 18px;
-      background-color: #ffffff;
+      background-color: #f2f2f2;
       color: #23405a;
       border: 2px solid #23405a;
       border-radius: 25px;
@@ -105,7 +105,7 @@
     <div class="container">
 
         <div class="left">
-            <img src="../assets/nw.png" alt="Logo" class="logo">
+            <img src="../assets/logologin.png" alt="Logo" class="logo">
         </div>
 
 

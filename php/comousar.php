@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -52,8 +51,15 @@
     <div class="sidebar">
         <img src="../assets/nw.png" alt="Logo Avalia+">
         <ul>
-            <li><a href="cadastrar.php">Cadastrar</a></li>
-            <li><a href="formularios.php">Formulários</a></li>
+            <li><a href="painelusuarios.php">Inicio</a></li>
+            <?php
+              if (session_status() === PHP_SESSION_NONE) { session_start(); }
+              $cargo = strtolower($_SESSION['cargo'] ?? '');
+              if (in_array($cargo, ['coordenador','admin'], true)):
+            ?>
+              <li><a href="cadastrar.php">Cadastrar</a></li>
+            <?php endif; ?>
+            <li><a href="formularios.php">Criar Provas</a></li>
             <li><a href="calendario.php">Calendário</a></li>
             <li><a href="comousar.php">Como usar</a></li>
         </ul>

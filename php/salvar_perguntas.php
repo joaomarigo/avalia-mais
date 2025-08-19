@@ -6,7 +6,6 @@ if (!$formularioId) {
     die("ID do formulário não informado.");
 }
 
-// Salvar questões objetivas
 $questoesObjetivas = $_POST['questao'] ?? [];
 foreach ($questoesObjetivas as $index => $enunciado) {
     if (!is_string($enunciado)) continue;
@@ -34,7 +33,6 @@ foreach ($questoesObjetivas as $index => $enunciado) {
     }
 }
 
-// Salvar questões dissertativas
 $questoesDissertativas = $_POST['questao_dissertativa'] ?? [];
 $respostasDissertativas = $_POST['resposta_dissertativa'] ?? [];
 
@@ -47,6 +45,5 @@ foreach ($questoesDissertativas as $i => $enunciado) {
     $stmt->execute([$formularioId, $enunciado]);
 }
 
-// Redirecionar para formularios.php com notificação
 header("Location: formularios.php?sucesso=1");
 exit;

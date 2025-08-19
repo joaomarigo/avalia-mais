@@ -12,14 +12,12 @@ if (!$aluno_nome || !$aluno_curso || empty($respostas)) {
 $acertos = 0;
 
 foreach ($respostas as $id_pergunta => $id_alternativa) {
-  // Buscar se a resposta está correta
   $stmt = $pdo->prepare("SELECT correta FROM alternativas WHERE id = ?");
   $stmt->execute([$id_alternativa]);
   $correta = $stmt->fetchColumn();
 
   if ($correta) $acertos++;
 
-  // Salvar a resposta
   $stmt = $pdo->prepare("
     INSERT INTO respostas_aluno 
     (aluno_nome, aluno_curso, pergunta_id, alternativa_id, correta)

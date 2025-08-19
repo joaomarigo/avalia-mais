@@ -1,23 +1,52 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once __DIR__ . '/config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']);
-    $senha = trim($_POST['senha']);
-
-    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email LIMIT 1");
-    $stmt->execute([':email' => $email]);
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($usuario && password_verify($senha, $usuario['senha'])) {
-        $_SESSION['email'] = $usuario['email'];
-        header('Location: inicio.php');
-        exit;
-    } else {
-        $_SESSION['erro_login'] = 'Email ou senha incorretos.';
-        header('Location: login.php');
-        exit;
+try {
+    // Confere recepção do POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $_SESSION['erro_login'] = 'Método inválido.';
+        header('Location: login.php'); exit;
     }
+
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+
+    if ($email === '' || $senha === '') {
+        $_SESSION['erro_login'] = 'Informe e-mail e senha.';
+        header('Location: login.php'); exit;
+    }
+
+    // Busca usuário
+    $sql = "SELECT id, nome, email, escola, senha_hash, cargo, materias
+            FROM usuarios WHERE email = :email LIMIT 1";
+    $st = $pdo->prepare($sql);
+    $st->execute([':email' => $email]);
+    $u = $st->fetch(PDO::FETCH_ASSOC);
+
+    if (!$u) {
+        $_SESSION['erro_login'] = 'E-mail não encontrado.';
+        header('Location: login.php'); exit;
+    }
+
+    // Verifica hash
+    if (!(strlen($u['senha_hash']) >= 20 && password_verify($senha, $u['senha_hash']))) {
+        $_SESSION['erro_login'] = 'Senha incorreta.';
+        header('Location: login.php'); exit;
+    }
+
+    // OK, loga
+    session_regenerate_id(true);
+    $_SESSION['usuario_id'] = $u['id'];
+    $_SESSION['cargo']      = $u['cargo'];
+    $_SESSION['nome']       = $u['nome'];
+    $_SESSION['email']      = $u['email'];
+
+    header('Location: ' . ($u['cargo'] === 'coordenador' ? 'painelusuarios.php' : 'painelusuarios.php'));
+    exit;
+
+} catch (Throwable $e) {
+    // error_log($e->getMessage());
+    $_SESSION['erro_login'] = 'Erro ao processar login.';
+    header('Location: login.php'); exit;
 }
-?>

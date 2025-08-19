@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -48,6 +51,7 @@
     </style>
 </head>
 <body>
+
     <div class="sidebar">
         <img src="../assets/nw.png" alt="Logo Avalia+">
         <ul>
@@ -68,10 +72,8 @@
             Logout
         </a>
     </div>
-
     <div class="content">
-        <h2>Calendário Escolar 2025</h2>
-        <iframe src="../assets/calendarioescolar2025.pdf" width="100%" height="800px"></iframe>
+        <p>Algumas notificacoes importantes estarao aqui!</p>
     </div>
 </body>
 </html>

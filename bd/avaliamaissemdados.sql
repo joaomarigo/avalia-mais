@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/08/2025 às 04:59
+-- Tempo de geração: 14/08/2025 às 05:00
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -46,17 +46,6 @@ CREATE TABLE `formularios` (
   `criado_em` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `formularios`
---
-
-INSERT INTO `formularios` (`id`, `titulo`, `criado_em`) VALUES
-(1, 'aaaa', '2025-07-31 01:01:12'),
-(2, 'aaaa', '2025-07-31 01:03:29'),
-(3, 'a', '2025-07-31 01:04:29'),
-(4, 'aaaaa', '2025-08-09 13:18:58'),
-(5, 'a', '2025-08-13 22:41:47');
-
 -- --------------------------------------------------------
 
 --
@@ -70,24 +59,6 @@ CREATE TABLE `perguntas` (
   `opcoes` text DEFAULT NULL,
   `tipo` enum('objetiva','dissertativa') NOT NULL DEFAULT 'objetiva'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `perguntas`
---
-
-INSERT INTO `perguntas` (`id`, `formulario_id`, `enunciado`, `opcoes`, `tipo`) VALUES
-(26, 2, 'a', '[{\"texto\":\"a\",\"correta\":false},{\"texto\":\"a\",\"correta\":true}]', 'objetiva'),
-(27, 2, 'a', NULL, 'dissertativa'),
-(28, 3, 'a', '[{\"texto\":\"a\",\"correta\":false},{\"texto\":\"a\",\"correta\":true}]', 'objetiva'),
-(29, 3, 'a', NULL, 'dissertativa'),
-(30, 3, 'a', '[{\"texto\":\"a\",\"correta\":false},{\"texto\":\"a\",\"correta\":true}]', 'objetiva'),
-(31, 3, 'a', NULL, 'dissertativa'),
-(32, 2, 'a', '[{\"texto\":\"a\",\"correta\":false},{\"texto\":\"a\",\"correta\":true}]', 'objetiva'),
-(33, 2, 'a', NULL, 'dissertativa'),
-(34, 4, 'a', '[{\"texto\":\"a\",\"correta\":false}]', 'objetiva'),
-(35, 4, 'a', NULL, 'dissertativa'),
-(36, 4, 'a', '[{\"texto\":\"a\",\"correta\":false}]', 'objetiva'),
-(37, 4, 'a', NULL, 'dissertativa');
 
 -- --------------------------------------------------------
 
@@ -138,15 +109,6 @@ CREATE TABLE `usuarios` (
   `materias` text NOT NULL,
   `criado_em` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `usuarios`
---
-
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `escola`, `senha_hash`, `cargo`, `materias`, `criado_em`) VALUES
-(1, 'Coordenador Inicial', 'coordenador@teste.com', 'Escola Modelo', '$2y$10$ztLUV9rTDVzMJm.Cm1C/1OgRe2dbTPSAuQvzFjDL1FGf9fG.Mx9gG', 'coordenador', 'Matemática, Português', '2025-08-13 23:24:42'),
-(2, 'Leonardo', 'leo@gmail.com', 'Etec', '$2y$10$jpm1unzQod1ajYiKm/mv/u5DxXH/BiGj33VhN7dst8oXUSBLAg.XO', 'professor', 'Biologia, EACNT, EAMST, Geografia, Língua Inglesa, Língua Espanhola, Língua Portuguesa', '2025-08-13 23:28:46'),
-(3, 'Jonas', 'jonas@gmail.com', 'Anglo', '$2y$10$GVlqcf9nIe1vhkI/1XX1J.Z5u9f97jeK1jO.u0wytyakkjqyQAA2K', 'professor', 'Língua Inglesa, Sociologia, Matemática, Língua Portuguesa', '2025-08-13 23:58:11');
 
 --
 -- Índices para tabelas despejadas
@@ -201,37 +163,37 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `alternativas`
 --
 ALTER TABLE `alternativas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `formularios`
 --
 ALTER TABLE `formularios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `perguntas`
 --
 ALTER TABLE `perguntas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `professores`
 --
 ALTER TABLE `professores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `respostas_aluno`
 --
 ALTER TABLE `respostas_aluno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para tabelas despejadas
