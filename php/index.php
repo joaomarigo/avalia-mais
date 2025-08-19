@@ -15,6 +15,7 @@
     body {
       scroll-behavior: smooth;
       background: #f9f9f9;
+      padding-top: 142px;
     }
 
     header {
@@ -23,6 +24,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      
+      /* fixa no topo */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* garante que fique por cima do conteúdo */
+
+  /* sombra */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.15);
     }
 
     .logo {
@@ -137,21 +148,11 @@ details[open] summary::after {
   content: "×"; 
   transform: rotate(0deg);
 }
-.phones {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    border-radius: 30%;
-    background: #fff;
-    box-shadow: 0 30px 45px rgba(0, 0, 0, 0.1);
-    margin: 0rem 0rem;
-    padding: 7rem;
-}
+
 
 .barra-separadora {
     width: 100%;
-    height: 273px;
+    height: 50px;
     background: linear-gradient(to right, #7a93b5, #b3cdea);
 }
 
@@ -229,11 +230,9 @@ body {
 }
 .container-features {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 60px;
-  padding: 60px 10%;
-  flex-wrap: wrap;
+  padding: 0px 10%;
+  
 }
 .beneficios{
   flex: 1;
@@ -241,14 +240,19 @@ body {
   flex-direction: column;
   justify-content: center;
   max-width: 500px;
-
-  /* 👇 força alinhamento à esquerda do bloco */
   text-align: left;
   align-items: flex-start;
 }
 
+.phones {
+    display: flex;
+    width: 600px;
+    margin: 0rem 3rem;
+    padding: 0rem;
+}
+
 .beneficios h2{           /* título acima dos três textos */
-  font-size: 28px;        /* ajuste se quiser maior */
+  font-size: 20px;        /* ajuste se quiser maior */
   font-weight: 800;
   color: #23405a;
   margin-bottom: 18px;
@@ -259,54 +263,29 @@ body {
   font-weight: 800;
 }
 
-.item{
-  display: flex;
-  align-items: flex-start;  /* ícone e textos “de cima” */
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.item div{                 /* garante textos à esquerda dentro do item */
-  text-align: left;
-}
-
-.item h1{
-  font-size: 30px;
-  font-weight: bold;
-  color: #2e3c70;
-  margin-bottom: 5px;
-}
-
-.item p{
-  font-size: 20px;
-  color: #444;
-  line-height: 1.5;
-}
-
-
 .item {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 25px;
-  gap: 15px;
+  margin-bottom: 15px;
+  gap: 0px;
 }
 
 .item img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
 }
 
 .item h1 {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   color: #2e3c70;
   margin-bottom: 5px;
 }
 
 .item p {
-  font-size: 20px;
+  font-size: 18px;
   color: #444;
-  line-height: 1.5;
+  line-height: 1.0;
 }
 .feature-cards {
   display: flex;
@@ -380,7 +359,7 @@ body {
 
 .video-section-custom {
   background-color: #3e588d;
-  padding: 15rem 2rem;
+  padding: 5rem 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -390,7 +369,7 @@ body {
   display: flex;
   align-items: center;      /* alinha no meio verticalmente */
   justify-content: space-between; /* dá espaço entre vídeo e texto */
-  gap: 20px;                /* espaçamento entre vídeo e texto */
+  gap: 100px;                /* espaçamento entre vídeo e texto */
 }
 
 .video-mockup {
@@ -743,13 +722,13 @@ body {
   width: 100%;
   background: #23405a;  /* barra azul-escuro */
   color: #ffffff;
-  margin-top: 28px;
+  margin-top: 50px;
 }
 
 .footer-bottom .inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 18px 24px;
+  padding: 10px 5px;
   font-size: 18px;
   letter-spacing: .2px;
 }
@@ -771,15 +750,6 @@ body {
 
 .video-section-custom {
   position: relative; /* para permitir posicionar elementos dentro dela */
-}
-
-.capelo-azul {
-  position: absolute;
-  top: 20px;   /* distância do topo da área azul */
-  left: 20px;  /* distância da esquerda */
-  width: 100px;  /* tamanho maior */
-  height: auto;
-  z-index: 5;
 }
 </style>
 </head>
@@ -807,7 +777,7 @@ body {
         <img src="../assets/icone-questoes.png" alt="Ícone Questões">
         <div>
           <h1>QUESTÕES PERSONALIZADAS</h1>
-          <p>Crie avaliações com perguntas de múltipla escolha ou dissertativas de forma rápida e prática.</p>
+          <p>Crie avaliações com perguntas de múltipla escolha de forma rápida e prática.</p>
         </div>
       </div>
 
@@ -834,7 +804,7 @@ body {
     <img src="../assets/monitor.png" alt="Questões com alternativas">
     <h3>QUESTÕES COM ALTERNATIVAS</h3>
     <p>Crie, edite e gerencie suas avaliações com facilidade.</p>
-    <div class="extra-text">Tenha acesso rápido à Avalia+ de qualquer lugar, direto pelo navegador.</div>
+    <div class="extra-text">No Avalia+ a forma de criar provas é feita de maneira fácil e agil.</div>
   </div>
 
   <div class="feature-card destaque">
@@ -855,7 +825,6 @@ body {
 
 </section>
   <section class="video-section-custom">
-    <img src="../assets/capelo.png" alt="Capelo" class="capelo-azul">
   <div class="video-container">
     <div class="video-mockup">
       
@@ -892,14 +861,14 @@ em suas atividades educacionais.</p>
 
   <details>
     <summary>É SEGURO?</summary>
-    <p>Sim, o Avalia+ foi desenvolvido com foco na segurança dos dados e no controle de acesso. Apenas usuários previamente cadastrados e autorizados podem utilizar a plataforma. Além disso, existem diferentes níveis de permissão, o que significa que professores, coordenadores e demais usuários têm acessos distintos, conforme suas responsabilidades. Isso garante que as informações estejam protegidas e acessíveis apenas por quem realmente precisa delas.</p>
+    <p>Sim, o Avalia+ foi desenvolvido com foco na segurança dos dados e no controle de acesso. Apenas professores e coordenadores previamente cadastrados e autorizados podem utilizar a plataforma. Além disso, existem diferentes níveis de permissão, o que significa que professores, coordenadores têm acessos distintos, conforme suas responsabilidades. Isso garante que as informações estejam protegidas e acessíveis apenas por quem realmente precisa delas.</p>
   </details>
 </section>
 
 <section class="cta-bloco">
   <h2>
-    CRIE COM PROPÓSITO, ORGANIZE COM ESTRATÉGIA E AVALIE COM VISÃO.
-    <span>É ASSIM QUE SE CONSTRÓI O SUCESSO!</span>
+    CRIE PROVAS COM FACILIDADE E FOQUE NO QUE REALMENTE IMPORTA:
+    <span>O APRENDIZADO DOS SEUS ALUNOS!</span>
   </h2>
   <button onclick="window.location.href='login.php'">Começe Já</button>
 
