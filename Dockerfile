@@ -12,9 +12,9 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/php
 RUN sed -ri -e 's!DocumentRoot /var/www/html!DocumentRoot ${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
  && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
-# Criar um conf separado com o bloco <Directory> e habilitar
-RUN bash -lc 'cat >/etc/apache2/conf-available/z-app.conf <<EOF\n<Directory ${APACHE_DOCUMENT_ROOT}>\n    AllowOverride All\n    Require all granted\n</Directory>\nEOF' \
- && a2enconf z-app
+# Copiar nosso conf extra e habilitar
+COPY apache-app.conf /etc/apache2/conf-available/z-app.conf
+RUN a2enconf z-app
 
 # Copiar o app
 COPY . /var/www/html
