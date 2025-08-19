@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: avalia-plus-php
+    name: avaliamais
     env: docker
     plan: free
     autoDeploy: true
