@@ -1,5 +1,5 @@
 <?php
-$host = getenv('DB_HOST') ?: 'mysql.railway.internal';
+$host = getenv('DB_HOST') ?: 'localhost';
 $dbname = getenv('DB_NAME') ?: 'avaliamais';
 $user = getenv('DB_USER') ?: 'root';
 $pass = getenv('DB_PASS') ?: '';
