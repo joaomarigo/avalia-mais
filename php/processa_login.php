@@ -42,7 +42,7 @@ try {
     $_SESSION['nome']       = $u['nome'];
     $_SESSION['email']      = $u['email'];
 
-    header('Location: ' . ($u['cargo'] === 'coordenador' ? 'painelusuarios.php' : 'painelusuarios.php'));
+    header('Location: ' . ($u['cargo'] === 'coordenador' ? 'inicio.php' : 'inicio.php'));
     exit;
 
 } catch (Throwable $e) {
