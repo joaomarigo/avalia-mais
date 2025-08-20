@@ -101,8 +101,6 @@ $formularios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-
-
     <div class="sidebar">
         <img src="../assets/nw.png" alt="Logo Avalia+">
         <ul>

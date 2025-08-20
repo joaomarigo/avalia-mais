@@ -19,7 +19,6 @@
 
     header {
       background: #f2f2f2;
-      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -726,6 +725,7 @@ body {
   font-weight: bold;
   color: #23405a;
   line-height: 1.5;
+  font-style: italic;
 }
 
 .cta-bloco .cta-texto h4 span {
@@ -733,6 +733,7 @@ body {
   font-size: 27px;
   margin-top: 10px;
   color: #ffffff;
+  font-style: italic;
 }
 
 .cta-bloco .cta-texto button {
@@ -870,8 +871,8 @@ em suas atividades educacionais.</p>
 
   <div class="cta-texto">
     <h4>
-      UM SISTEMA QUE TRANSFORMA AVALIAÇÕES EM PRATICIDADE:
-      <span>MAIS TEMPO, ORGANIZAÇÃO E CLAREZA PARA O DOCENTE FOCAR NO QUE REALMENTE IMPORTA, O APRENDIZADO DOS ALUNOS</span>
+      Um sistema que transforma avaliações em praticidade:
+      <span>Mais tempo, organização e clareza para o docente focar no que realmente importa, o aprendizado dos alunos</span>
     </h4>
     <button onclick="window.location.href='login.php'">Começe Já</button>
   </div>
