@@ -15,25 +15,17 @@
     body {
       scroll-behavior: smooth;
       background: #f9f9f9;
-      padding-top: 142px;
     }
 
     header {
       background: #f2f2f2;
-      padding: 2rem;
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
-      /* fixa no topo */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000; /* garante que fique por cima do conteúdo */
-
-  /* sombra */
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.15);
+      position: relative; 
+      z-index: 2;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
     }
 
     .logo {
@@ -802,9 +794,9 @@ body {
 <div class="feature-cards">
   <div class="feature-card">
     <img src="../assets/monitor.png" alt="Questões com alternativas">
-    <h3>QUESTÕES COM ALTERNATIVAS</h3>
-    <p>Crie, edite e gerencie suas avaliações com facilidade.</p>
-    <div class="extra-text">No Avalia+ a forma de criar provas é feita de maneira fácil e agil.</div>
+    <h3>REDAÇÃO NAS AVALIAÇÕES</h3>
+    <p>Desenvolva, corrija e organize redações de forma prática e eficiente.</p>
+    <div class="extra-text">No Avalia+ é possível gerenciar correções de redações de maneira centralizada, garantindo praticidade e qualidade na avaliação.</div>
   </div>
 
   <div class="feature-card destaque">
@@ -867,8 +859,8 @@ em suas atividades educacionais.</p>
 
 <section class="cta-bloco">
   <h2>
-    CRIE PROVAS COM FACILIDADE E FOQUE NO QUE REALMENTE IMPORTA:
-    <span>O APRENDIZADO DOS SEUS ALUNOS!</span>
+    UM SISTEMA QUE TRANSFORMA AVALIAÇÕES EM PRATICIDADE:
+    <span>MAIS TEMPO, ORGANIZAÇÃO E CLAREZA PARA O DOCENTE FOCAR NO QUE REALMENTE IMPORTA, O APRENDIZADO DOS ALUNOS</span>
   </h2>
   <button onclick="window.location.href='login.php'">Começe Já</button>
 
