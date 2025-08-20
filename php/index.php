@@ -141,10 +141,9 @@ details[open] summary::after {
   transform: rotate(0deg);
 }
 
-
 .barra-separadora {
     width: 100%;
-    height: 50px;
+    height: 85px;
     background: linear-gradient(to right, #7a93b5, #b3cdea);
 }
 
@@ -402,44 +401,10 @@ body {
   margin-top: 1rem;
   line-height: 1.6;
 }
-.cta-bloco {
-  background-color: #b3cdea;
-  text-align: center;
-  padding: 90px 110px;
-}
 
-.cta-bloco h2 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #23405a;
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.5;
-}
 
-.cta-bloco h2 span {
-  display: block;
-  font-size: 34px;
-  margin-top: 10px;
-  color: #ffffff;
-}
 
-.cta-bloco button {
-  margin-top: 70px;
-  padding: 12px 30px;
-  font-size: 25px;
-  background-color: #b3cdea;
-  color: #1f3c88;
-  border: 2px solid #1f3c88;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
-.cta-bloco button:hover {
-  background-color: #1f3c88;
-  color: white;
-}
 .rodape-logo {
   padding: 40px 20px;
   color: #23405a;
@@ -523,13 +488,6 @@ body {
   line-height: 1.6;
 }
 
-
-/* Introdução suave do CTA ao rolar (sem alterar seu HTML) */
-.cta-bloco {
-  position: relative;
-  will-change: transform, opacity, clip-path, filter;
-}
-
 /* estado inicial (oculto + levemente abaixo + recortado no topo) */
 .cta-bloco.cta-intro {
   opacity: 0;
@@ -594,7 +552,7 @@ body {
 
 /* 1) Grid para os cards ficarem com a mesma altura */
 .feature-cards{
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(3, minmax(280px, 1fr)); /* ajusta se quiser 2 colunas no mobile */
   gap: 30px;
   align-items: stretch; /* estica os cards igualmente */
@@ -719,11 +677,12 @@ body {
 
 .footer-bottom .inner {
   max-width: 1200px;
-  margin: 0 auto;
   padding: 10px 5px;
   font-size: 18px;
   letter-spacing: .2px;
+  text-align: left;   /* 🔹 força alinhamento à esquerda */
 }
+
 
 /* responsivo */
 @media (max-width: 980px) {
@@ -736,12 +695,61 @@ body {
     margin-left: 0;
   }
 }
-.cta-bloco {
-  margin-bottom: 60px; /* aumenta o espaçamento */
-}
 
 .video-section-custom {
   position: relative; /* para permitir posicionar elementos dentro dela */
+}
+
+.cta-bloco {
+  background-color: #b3cdea;
+  display: flex;                /* imagem e texto lado a lado */
+  align-items: center;          /* centraliza verticalmente */
+  justify-content: center;      /* centraliza o conjunto */
+  gap: 30px;                    /* espaço entre imagem e texto */
+  padding: 70px 110px;
+  margin-bottom: 70px;
+}
+
+.cta-bloco img {
+  width: 850px;                   /* ajuste se quiser maior/menor */
+  margin: 0;
+  display: block;
+}
+
+.cta-bloco .cta-texto {
+  max-width: 800px;
+  text-align: center;           /* centraliza título e botão */
+}
+
+.cta-bloco .cta-texto h4 {
+  font-size: 30px;
+  font-weight: bold;
+  color: #23405a;
+  line-height: 1.5;
+}
+
+.cta-bloco .cta-texto h4 span {
+  display: block;
+  font-size: 27px;
+  margin-top: 10px;
+  color: #ffffff;
+}
+
+.cta-bloco .cta-texto button {
+  margin-top: 50px;
+  padding: 12px 30px;
+  font-size: 25px;
+  background-color: #b3cdea;
+  color: #1f3c88;
+  border: 2px solid #1f3c88;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-bloco .cta-texto button:hover {
+  background-color: #1f3c88;
+  color: white;
 }
 </style>
 </head>
@@ -794,9 +802,9 @@ body {
 <div class="feature-cards">
   <div class="feature-card">
     <img src="../assets/monitor.png" alt="Questões com alternativas">
-    <h3>REDAÇÃO NAS AVALIAÇÕES</h3>
-    <p>Desenvolva, corrija e organize redações de forma prática e eficiente.</p>
-    <div class="extra-text">No Avalia+ é possível gerenciar correções de redações de maneira centralizada, garantindo praticidade e qualidade na avaliação.</div>
+    <h3>CRIAÇÃO DE REDAÇÃO</h3>
+    <p>Layout padronizado de acordo com as redações de vestibulares.</p>
+    <div class="extra-text">No Avalia+, é possível confeccionar redações, garantindo praticidade e qualidade na avaliação.</div>
   </div>
 
   <div class="feature-card destaque">
@@ -858,13 +866,18 @@ em suas atividades educacionais.</p>
 </section>
 
 <section class="cta-bloco">
-  <h2>
-    UM SISTEMA QUE TRANSFORMA AVALIAÇÕES EM PRATICIDADE:
-    <span>MAIS TEMPO, ORGANIZAÇÃO E CLAREZA PARA O DOCENTE FOCAR NO QUE REALMENTE IMPORTA, O APRENDIZADO DOS ALUNOS</span>
-  </h2>
-  <button onclick="window.location.href='login.php'">Começe Já</button>
+  <img src="../assets/cloud.png" alt="Nuvem motivacional">
 
+  <div class="cta-texto">
+    <h4>
+      UM SISTEMA QUE TRANSFORMA AVALIAÇÕES EM PRATICIDADE:
+      <span>MAIS TEMPO, ORGANIZAÇÃO E CLAREZA PARA O DOCENTE FOCAR NO QUE REALMENTE IMPORTA, O APRENDIZADO DOS ALUNOS</span>
+    </h4>
+    <button onclick="window.location.href='login.php'">Começe Já</button>
+  </div>
 </section>
+
+
   <footer class="footer">
   <div class="footer-wrap">
     <!-- Coluna esquerda: Contato -->
