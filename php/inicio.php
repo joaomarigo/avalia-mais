@@ -1,3 +1,8 @@
+<?php
+session_start();
+$cargoSessao = strtolower($_SESSION['cargo'] ?? '');
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -104,7 +109,6 @@
   </style>
 </head>
 <body>
-
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <i class="fas fa-bars close-btn" id="closeSidebar"></i>
@@ -112,14 +116,19 @@
     </div>
 
     <a href="inicio.php">Inicio</a>
-    <a href="cadastrar.php">Cadastro</a>
-    <a href="formularios.php">Provas</a>
-    <a href="#">Gabaritos</a>
-    <a href="comousar.php">Como Usar</a>
 
-    <div class="logout" id="logoutBtn">
-      <i class="fas fa-door-open"></i> Logout
-    </div>
+<?php if ($cargoSessao !== 'professor'): ?>
+  <a href="cadastrar.php">Cadastro</a>
+<?php endif; ?>
+
+<a href="formularios.php">Provas</a>
+<a href="#">Gabaritos</a>
+<a href="comousar.php">Como Usar</a>
+<a href="logout.php" class="logout" id="logoutBtn">
+  <i class="fas fa-door-open"></i> Logout
+</a>
+
+
   </div>
 
   <div class="header">
@@ -133,8 +142,8 @@
   <div class="content" id="mainContent">
     <div class="retangulo">
       <div class="text">
-        <h1>Avalia+: praticidade e eficiência na avaliação escolar.</h1>
-        <p>É uma plataforma que facilita a criação e organização de avaliações escolares.</p>
+        <h1>Avalia+ praticidade e eficiência na avaliação escolar.</h1>
+        <p>É uma plataforma que facilita a criação e organização de avaliações escolares</p>
       </div>
       <div class="image">
         <img src="../assets/livros.png" alt="Ícones de livros e caderno">
@@ -142,7 +151,7 @@
     </div>
 
     <div class="buttons">
-      <button class="btn provas">Provas</button>
+      <button class="btn provas" onclick="window.location.href='formularios.php'">Provas</button>
       <button class="btn redacoes">Redações</button>
       <button class="btn gabaritos">Gabaritos</button>
     </div>
