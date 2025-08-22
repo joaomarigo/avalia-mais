@@ -182,9 +182,6 @@ $cargoSessao = strtolower($_SESSION['cargo'] ?? '');
       <img src="../assets/logo_azulclaro.png" alt="Avalia+">
     </div>
     <a href="inicio.php">Início</a>
-    <a href="cadastrar.php">Cadastro</a>
-    <a href="formularios.php">Provas</a>
-    <a href="#">Gabaritos</a>
     <a href="comousar.php">Como Usar</a>
     <a href="logout.php" class="logout" id="logoutBtn">
       <i class="fas fa-door-open"></i> Logout

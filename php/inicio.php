@@ -236,7 +236,7 @@ $cargoLabel   = ucfirst($cargoSessao);
     </div>
     <div class="buttons">
       <button class="btn provas" onclick="window.location.href='formularios.php'">Provas</button>
-      <button class="btn redacoes">Redações</button>
+      <button class="btn provas" onclick="window.location.href='redacoes.php'">Redações</button>
       <button class="btn gabaritos">Gabaritos</button>
     </div>
   </div>
