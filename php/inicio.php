@@ -199,7 +199,7 @@ $cargoLabel   = ucfirst($cargoSessao);
     </div>
     <a href="inicio.php">Inicio</a>
     <?php if ($cargoSessao !== 'professor'): ?>
-      <a href="cadastrar.php">Cadastro</a>
+      <a href="../php/coordenador/painel.php">Painel Coordenador</a>
     <?php endif; ?>
     <a href="comousar.php">Como Usar</a>
     <a href="logout.php" class="logout" id="logoutBtn"><i class="fas fa-door-open"></i> Logout</a>

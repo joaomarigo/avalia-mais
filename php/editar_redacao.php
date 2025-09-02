@@ -159,6 +159,19 @@ $turma_padrao      = '';                        // deixa em branco para o prof. 
       .apoio input[type="text"], .apoio textarea, .campo input, .campo-nome input {border:0 !important}
       a[href]:after{content:""}
     }
+
+      /* ...seu CSS... */
+
+  .campo.curso { justify-content:center; }
+  .curso_input{
+    border:0;outline:0;width:100%;
+    font-weight:700;font-size:16px;color:#23405a;
+    text-align:center;background:transparent;
+  }
+
+  @media print{
+    .curso_input{border:0 !important}
+  }
   </style>
 </head>
 <body>
@@ -166,11 +179,21 @@ $turma_padrao      = '';                        // deixa em branco para o prof. 
 
     <!-- Cabeçalho da Redação (igual vibe do editar_formulario.php) -->
     <header class="prova">
-      <div class="marca">PROVÃO</div>
-      <div class="titulo"><?= htmlspecialchars($formulario_titulo) ?> — REDAÇÃO</div>
-      <div class="sub">
-        <div>CURSO: <strong><?= htmlspecialchars($curso_padrao) ?></strong></div>
-      </div>
+      <div class="titulo"><?= htmlspecialchars($formulario_titulo) ?></div>
+      <div class="sub" style="width:100%">
+  <div class="campo curso" style="width:100%;max-width:520px;margin:0 auto;">
+    <label for="curso" style="white-space:nowrap">CURSO:</label>
+    <input
+      id="curso"
+      class="curso_input"
+      type="text"
+      placeholder="Digite o nome do curso"
+      value="<?= htmlspecialchars($curso_padrao) ?>"
+      aria-label="Nome do curso"
+    />
+  </div>
+</div>
+
 
       <div class="linha-info">
         <div class="campo"><label for="turma">Turma:</label></div>
@@ -242,7 +265,7 @@ $turma_padrao      = '';                        // deixa em branco para o prof. 
 
     <div class="actions">
       <button type="button" class="btn btn-outline" onclick="window.print()">Imprimir</button>
-      <button type="button" class="btn btn-ghost" onclick="scrollTo(0,0)">Voltar ao topo</button>
+      <button type="button" class="btn btn-outline" onclick="window.location.href='redacoes.php'">Voltar</button>
     </div>
 
     <footer style="text-align:center;margin-top:18px;color:#6b7785;font-size:13px">
@@ -295,6 +318,24 @@ $turma_padrao      = '';                        // deixa em branco para o prof. 
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     }
+
+    // ---------- Curso editável (somente client-side, persiste em localStorage) ----------
+  (function(){
+    const redacaoId = <?= (int)$id ?>;
+    const key = 'curso_red_' + redacaoId;
+    const inputCurso = document.getElementById('curso');
+
+    // carrega do localStorage ou mantém o valor vindo do PHP
+    if (inputCurso) {
+      const salvo = localStorage.getItem(key);
+      if (salvo !== null) inputCurso.value = salvo;
+
+      // salva a cada digitação
+      inputCurso.addEventListener('input', () => {
+        localStorage.setItem(key, inputCurso.value.trim());
+      });
+    }
+  })();
   </script>
 </body>
 </html>

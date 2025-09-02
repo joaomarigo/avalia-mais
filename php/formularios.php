@@ -165,7 +165,7 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
     </div>
     <a href="inicio.php">Inicio</a>
     <?php if ($cargoSessao !== 'professor'): ?>
-      <a href="cadastrar.php">Cadastro</a>
+      <a href="cadastrar.php">Painel Coordenador</a>
     <?php endif; ?>
     <a href="comousar.php">Como Usar</a>
     <a href="logout.php" class="logout"><i class="fas fa-door-open"></i> Logout</a>

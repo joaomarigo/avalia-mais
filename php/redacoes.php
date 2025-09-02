@@ -32,6 +32,15 @@ $stmtReds = $pdo->query("SELECT id, titulo, tema, criado_em FROM redacoes ORDER 
 $redacoes = $stmtReds->fetchAll(PDO::FETCH_ASSOC);
 
 $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
+$deletedOk  = (isset($_GET['deleted']) && $_GET['deleted'] === '1');
+$deletedErr = (isset($_GET['deleted']) && $_GET['deleted'] === '0');
+
+// CSRF token
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrfToken = $_SESSION['csrf_token'];
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -144,6 +153,129 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
       padding: 12px 20px; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,.15);
       z-index: 2500; font-size: 14px;
     }
+
+    /* Botão lixeira */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  background: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s, background .2s, color .2s, border-color .2s;
+}
+.btn-delete:hover {
+  background: #dc2626;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(220,38,38,0.25);
+}
+
+/* Container da confirmação (toast/modal) */
+.confirm-wrap {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3000;
+  display: none;
+}
+.confirm-card {
+  width: 360px;
+  max-width: calc(100vw - 40px);
+  background: #ffffff;
+  border-left: 6px solid #dc2626;
+  border-radius: 14px;
+  padding: 16px 16px 12px 16px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+  animation: slideUp .25s ease-out forwards;
+}
+.confirm-title {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.confirm-text {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+.confirm-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+.confirm-btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+.confirm-cancel {
+  background: #f3f4f6; color: #374151;
+}
+.confirm-cancel:hover { filter: brightness(0.96); }
+.confirm-yes {
+  background: #dc2626; color: #fff;
+  box-shadow: 0 6px 14px rgba(220,38,38,0.25);
+}
+.confirm-yes:hover { filter: brightness(1.05); }
+
+@keyframes slideUp {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* Toast de sucesso de exclusão */
+.notify.success {
+  background-color: #16a34a;
+}
+.notify.error {
+  background-color: #dc2626;
+}
+
+
+/* Estilo base para botões secundários (Abrir/Excluir) */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;          /* altura fixa igual */
+  padding: 0 14px;       /* mesmo padding horizontal */
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #1a3a7c;
+  background: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+
+/* Abrir */
+.btn-secondary.open {
+  color: #1a3a7c;
+}
+.btn-secondary.open:hover {
+  background: #1a3a7c;
+  color: #fff;
+}
+
+/* Excluir */
+.btn-secondary.delete {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+.btn-secondary.delete:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
   </style>
 </head>
 <body>
@@ -156,7 +288,7 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
     </div>
     <a href="inicio.php">Inicio</a>
     <?php if ($cargoSessao !== 'professor'): ?>
-      <a href="cadastrar.php">Cadastro</a>
+      <a href="cadastrar.php">Painel Coordenador</a>
     <?php endif; ?>
     <a href="comousar.php">Como Usar</a>
 
@@ -202,7 +334,16 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
               <div class="muted">Tema: <?= htmlspecialchars($r['tema']) ?></div>
             <?php endif; ?>
             <small>Criada em: <?= htmlspecialchars(date('d/m/Y H:i', strtotime($r['criado_em']))) ?></small>
-            <a class="more" href="visualizar_redacao.php?id=<?= (int)$r['id'] ?>">Abrir</a>
+           <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+  <a class="btn-secondary open" href="visualizar_redacao.php?id=<?= (int)$r['id'] ?>">Abrir</a>
+
+  <button class="btn-secondary delete" type="button"
+          onclick="confirmarExclusao(<?= (int)$r['id'] ?>, '<?= htmlspecialchars($r['titulo'] ?: 'Redação sem título', ENT_QUOTES) ?>')">
+    Excluir
+  </button>
+</div>
+
+
           </div>
         <?php endforeach; ?>
       <?php else: ?>
@@ -220,6 +361,17 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
       setTimeout(() => { const n = document.getElementById('notify'); if (n) n.style.display = 'none'; }, 3000);
     </script>
   <?php endif; ?>
+
+<?php if ($deletedOk): ?>
+  <div class="notify success" id="notify">Redação excluída com sucesso!</div>
+  <script>setTimeout(() => { const n = document.getElementById('notify'); if (n) n.style.display = 'none'; }, 3000);</script>
+<?php endif; ?>
+
+<?php if ($deletedErr): ?>
+  <div class="notify error" id="notify">Não foi possível excluir a redação.</div>
+  <script>setTimeout(() => { const n = document.getElementById('notify'); if (n) n.style.display = 'none'; }, 3500);</script>
+<?php endif; ?>
+
 
   <script>
     // Sidebar toggle (igual ao formularios.php)
@@ -267,6 +419,88 @@ $sucesso = (isset($_GET['sucesso']) && $_GET['sucesso'] == '1');
       if (cal) cal.innerHTML = html;
     }
     gerarCalendario();
+
+     let alvoExcluirId = null;
+  let alvoExcluirTitulo = '';
+
+  function confirmarExclusao(id, titulo) {
+    alvoExcluirId = id;
+    alvoExcluirTitulo = titulo || '';
+    const wrap = document.getElementById('confirmWrap');
+    const desc = document.getElementById('confirmDesc');
+    if (desc) {
+      const nome = (alvoExcluirTitulo || 'esta redação');
+      desc.textContent = `Tem certeza que deseja excluir “${nome}”? Esta ação não poderá ser desfeita.`;
+    }
+    wrap.style.display = 'block';
+    // Acessibilidade: focar botão “Excluir”
+    setTimeout(() => document.getElementById('btnYes')?.focus(), 10);
+  }
+
+  function fecharConfirmacao() {
+    const wrap = document.getElementById('confirmWrap');
+    wrap.style.display = 'none';
+    alvoExcluirId = null;
+    alvoExcluirTitulo = '';
+  }
+
+  // Delegação: funciona mesmo que os botões sejam renderizados depois do script
+document.addEventListener('click', (e) => {
+  // Botão Cancelar
+  if (e.target.closest('#btnCancel')) {
+    e.preventDefault();
+    fecharConfirmacao();
+    return;
+  }
+
+  // Botão Excluir
+  if (e.target.closest('#btnYes')) {
+    e.preventDefault();
+    if (!alvoExcluirId) return;
+    const campoId = document.getElementById('excluirId');
+    if (campoId) campoId.value = alvoExcluirId;
+    const form = document.getElementById('formExcluir');
+    if (form) form.submit();
+    return;
+  }
+});
+
+  // Fechar ao clicar fora
+  document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('confirmWrap');
+    const card = wrap?.querySelector('.confirm-card');
+    if (wrap && wrap.style.display === 'block' && card && !card.contains(e.target) && !e.target.closest('.btn-delete')) {
+      fecharConfirmacao();
+    }
+  });
+
+  // Fechar com ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') fecharConfirmacao();
+  });
   </script>
+  <!-- Confirmação animada -->
+<div class="confirm-wrap" id="confirmWrap" aria-hidden="true">
+  <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDesc">
+    <div class="confirm-title" id="confirmTitle">
+      <i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;"></i>
+      Confirmar exclusão
+    </div>
+    <div class="confirm-text" id="confirmDesc">
+      Tem certeza que deseja excluir esta redação?
+    </div>
+    <div class="confirm-actions">
+      <button class="confirm-btn confirm-cancel" id="btnCancel">Cancelar</button>
+      <button class="confirm-btn confirm-yes" id="btnYes">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Form oculto de exclusão -->
+<form id="formExcluir" action="excluir_redacao.php" method="POST" style="display:none;">
+  <input type="hidden" name="id" id="excluirId">
+  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+</form>
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/08/2025 às 05:00
+-- Tempo de geração: 29/08/2025 às 13:51
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -43,7 +43,9 @@ CREATE TABLE `alternativas` (
 CREATE TABLE `formularios` (
   `id` int(11) NOT NULL,
   `titulo` varchar(255) NOT NULL,
-  `criado_em` datetime DEFAULT current_timestamp()
+  `criado_em` datetime DEFAULT current_timestamp(),
+  `criado_por` int(11) DEFAULT NULL,
+  `materia` varchar(120) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -75,6 +77,21 @@ CREATE TABLE `professores` (
   `email` varchar(100) NOT NULL,
   `materia` varchar(50) NOT NULL,
   `foto` longtext DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `redacoes`
+--
+
+CREATE TABLE `redacoes` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `tema` varchar(255) DEFAULT NULL,
+  `descricao` text DEFAULT NULL,
+  `criado_em` datetime NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -125,7 +142,9 @@ ALTER TABLE `alternativas`
 -- Índices de tabela `formularios`
 --
 ALTER TABLE `formularios`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_form_criado_por` (`criado_por`),
+  ADD KEY `idx_form_materia` (`materia`);
 
 --
 -- Índices de tabela `perguntas`
@@ -139,6 +158,13 @@ ALTER TABLE `perguntas`
 ALTER TABLE `professores`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Índices de tabela `redacoes`
+--
+ALTER TABLE `redacoes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_criado_em` (`criado_em`);
 
 --
 -- Índices de tabela `respostas_aluno`
@@ -181,6 +207,12 @@ ALTER TABLE `perguntas`
 -- AUTO_INCREMENT de tabela `professores`
 --
 ALTER TABLE `professores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `redacoes`
+--
+ALTER TABLE `redacoes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

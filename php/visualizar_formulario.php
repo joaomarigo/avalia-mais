@@ -5,8 +5,8 @@ include_once __DIR__ . '/config.php';
 $id = $_GET['id'] ?? null;
 
 $formulario_titulo = '1º SEMESTRE DE 2025'; // Sem “PROVÃO”
-$curso_padrao      = 'Técnico em SECRETARIADO';
-$turma_padrao      = '2º ANO';
+$curso_padrao      = '';
+$turma_padrao      = '';
 
 if ($id) {
   $stmt = $pdo->prepare("SELECT titulo FROM formularios WHERE id = :id");
@@ -185,8 +185,43 @@ if ($id) {
     .tag .tag-x:hover{ background:#d7e6f5 }
 
     /* NÃO mostrar o botão na impressão */
-    @media print{
-      .tag .tag-x{ display:none !important }
+    @media print {
+      .top-acoes,    /* barra superior com imprimir/adicionar */
+      .controles {   /* botões dentro de cada questão */
+        display: none !important;
+      }
+
+      .tag-add { 
+      display: none !important;   /* barra de adicionar tags (input + botão) */
+      }
+
+      header.prova {
+      break-after: avoid-page;
+      page-break-after: avoid;
+    }
+
+    /* impede que o bloco de matérias quebre ou pule para a página 2 */
+    #materias {
+      break-before: avoid-page;
+      page-break-before: avoid;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin-top: 8px !important; /* deixa mais compacto na impressão */
+    }
+
+    /* esconde a barra de adicionar tags */
+    #materias .tag-add {
+      display: none !important;
+    }
+
+    #materias .tag-add { display: none !important; }
+
+    /* novo: esconde o "x" dentro das tags */
+    #materias .tag .tag-x {
+      display: none !important;
+    }
+
+    
     }
 
     /* ------- Questões (duas colunas) ------- */
@@ -273,7 +308,7 @@ if ($id) {
       /* Deixa o grid preencher para BAIXO antes de criar outra coluna */
       display: grid;
       grid-auto-flow: column;                 /* preenche verticalmente */
-      grid-template-rows: repeat(var(--gab-rows, 30), auto); /* 30 linhas por coluna */
+      grid-template-rows: repeat(var(--gab-rows, 35), auto); /* 30 linhas por coluna */
       row-gap: 12px;                          /* espaço vertical entre itens */
       column-gap: 16px;                       /* espaço entre colunas */
       align-items: start;
@@ -364,6 +399,37 @@ if ($id) {
       }
     }
 
+        /* === HEAD DA QUESTÃO: manter tudo na mesma linha === */
+    .questao-head{
+      flex-wrap: nowrap;                 /* não deixa quebrar */
+    }
+
+    /* Badge com largura fixa para 1–2 dígitos e não “empurrar” os botões */
+    .badge-num{
+      flex: 0 0 120px;                   /* largura fixa */
+      width: 120px;
+      white-space: nowrap;
+    }
+
+    /* Botões à direita e sem quebra entre eles */
+    .controles{
+      margin-left: auto;                 /* empurra p/ direita */
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;                 /* não quebra o 2º botão */
+      align-items: center;
+    }
+
+    .btn{ white-space: nowrap; }         /* evita quebra dentro do botão */
+
+    /* (Opcional) em telas bem estreitas, pode permitir quebrar */
+    @media (max-width: 560px){
+      .questao-head{ flex-wrap: wrap; }
+      .controles{ margin-left: 0; width: 100%; justify-content: flex-end; }
+    }
+
+    
+
 
   </style>
 </head>
@@ -424,7 +490,7 @@ if ($id) {
     </section>
 
     <!-- TAGS -->
-    <section class="bloco">
+    <section class="bloco" id="materias">
       <h3>Matérias</h3>
       <div id="tags" class="tags">
         <span class="tag">Português</span>
@@ -446,7 +512,7 @@ if ($id) {
       <div id="lista-questoes"></div>
     </section>
 
-    <!-- Gabarito (ENEM, sem respostas) -->
+    <!-- Gabarito  -->
     <section class="gabarito" id="gabarito">
       <h3>GABARITO</h3>
       <div class="gabarito-grid" id="gabaritoGrid"></div>
@@ -510,35 +576,48 @@ if ($id) {
     // Ao carregar a página, adiciona "x" nas tags já existentes
     enhanceExistingTags();
 
-    function criarBlocoQuestao(
-      titulo='Sem título',
-      enunciado='Descreva o enunciado aqui...',
-      alternativas=['Alternativa A','Alternativa B','Alternativa C','Alternativa D']
-    ){
-      const el = document.createElement('div');
-      el.className = 'questao';
-      el.innerHTML = `
-        <div class="questao-head">
-          <span class="badge-num">Questão <span class="numero">1</span></span>
-          <div class="controles">
-            <button type="button" class="btn btn-add" onclick="adicionarQuestaoDepois(this)">Adicionar questão</button>
-            <button type="button" class="btn btn-remove" onclick="removerQuestao(this)">Remover</button>
-          </div>
+function criarBlocoQuestao(
+  titulo = '', // começa vazio
+  enunciado = '', // começa vazio
+  alternativas = ['Alternativa A','Alternativa B','Alternativa C','Alternativa D']
+){
+  const el = document.createElement('div');
+  el.className = 'questao';
+  el.innerHTML = `
+    <div class="questao-head">
+      <span class="badge-num">Questão <span class="numero">1</span></span>
+      <div class="controles">
+        <button type="button" class="btn btn-add" onclick="adicionarQuestaoDepois(this)">Adicionar questão</button>
+        <button type="button" class="btn btn-remove" onclick="removerQuestao(this)">Remover</button>
+      </div>
+    </div>
+    <input 
+      type="text" 
+      class="titulo-questao" 
+      value="${escapeHtml(titulo)}" 
+      placeholder="Digite o título da questão">
+    
+    <textarea 
+      class="enunciado" 
+      rows="3" 
+      placeholder="Descreva o enunciado aqui...">${escapeHtml(enunciado)}</textarea>
+    
+    <div class="alternativas">
+      ${['A','B','C','D'].map((L,i)=>`
+        <div class="alt">
+          <span class="letra">${L}</span>
+          <input type="radio" class="alt-radio" name="tmpName" value="${L}">
+          <input 
+            type="text" 
+            class="alt-texto" 
+            value="${escapeHtml(alternativas[i]||'')}" 
+            placeholder="Texto da alternativa">
         </div>
-        <input type="text" class="titulo-questao" value="${escapeHtml(titulo)}">
-        <textarea class="enunciado" rows="3">${escapeHtml(enunciado)}</textarea>
-        <div class="alternativas">
-          ${['A','B','C','D'].map((L,i)=>`
-            <div class="alt">
-              <span class="letra">${L}</span>
-              <input type="radio" class="alt-radio" name="tmpName" value="${L}">
-              <input type="text" class="alt-texto" value="${escapeHtml(alternativas[i]||'')}" placeholder="Texto da alternativa">
-            </div>
-          `).join('')}
-        </div>
-      `;
-      return el;
-    }
+      `).join('')}
+    </div>
+  `;
+  return el;
+}
 
     function adicionarQuestao(){
       const q = criarBlocoQuestao();
